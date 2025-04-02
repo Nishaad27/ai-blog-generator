@@ -2,5 +2,3 @@ crewai
 crewai_tools
 python_dotenv
 streamlit
-pysqlite3-binary==0.5.4
-pysqlite3==0.5.4

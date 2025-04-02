@@ -1,7 +1,10 @@
+import os
 import streamlit as st
+
+# Force Python to use pysqlite3 instead of the system sqlite3
+os.environ["PYTHON_SQLITE3_BINARY"] = "1"
+
 __import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 from crewai.flow.flow import Flow, start, listen
 from pydantic import BaseModel
 from blog_automation import BlogAutomation
