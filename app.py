@@ -1,24 +1,27 @@
 import streamlit as st
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 from crewai.flow.flow import Flow, start, listen
 from pydantic import BaseModel
 from blog_automation import BlogAutomation
 from blog_translate import BlogTranslation
 
-# Page Configuration
+
 st.set_page_config(page_title="AI Blog Generator", page_icon="📝", layout="wide")
 
-# State Class
+
 class MainBlogState(BaseModel):
     topic: str = ""
     language: str = ""
     blog_content: str = ""
     translated_blog_content: str = ""
 
-# Flow Class
+
 class MainBlogFlow(Flow[MainBlogState]):
     def __init__(self, topic: str, language: str):
         super().__init__()
-        self.topic = topic  # Store attributes
+        self.topic = topic  
         self.language = language
 
     @start()
@@ -38,18 +41,18 @@ class MainBlogFlow(Flow[MainBlogState]):
         translated_blog_content = blog_translation.kickoff(self.state.language, self.state.blog_content)
         self.state.translated_blog_content = translated_blog_content.raw
 
-# Main UI
+
 def main():
     st.markdown("<h1 style='text-align: center; color: #444444;'>📝 AI-Powered Blog Generator & Translator</h1>", unsafe_allow_html=True)
 
-    # Sidebar for Input Fields
+  
     with st.sidebar:
         st.markdown("### ✨ **Customize Your Blog**")
         topic = st.text_input("📌 Enter Blog Topic", "AI in Healthcare")
         language = st.text_input("🌎 Enter Target Language", "French")
         generate_btn = st.button("🚀 Generate & Translate Blog")
 
-    # Initialize session state for persistent storage
+    
     if "blog_content" not in st.session_state:
         st.session_state.blog_content = ""
     if "translated_blog_content" not in st.session_state:
@@ -62,14 +65,14 @@ def main():
             flow = MainBlogFlow(topic, language)
             result = flow.kickoff()
 
-            # Store results in session state to persist
+            
             st.session_state.blog_content = flow.state.blog_content
             st.session_state.translated_blog_content = flow.state.translated_blog_content
             st.session_state.language = language  
 
             st.success("✅ Blog Successfully Generated & Translated!")
 
-    # Display Results with a Better Layout
+    
     if st.session_state.blog_content:
         st.markdown("<hr style='border:1px solid #ccc;'>", unsafe_allow_html=True)
 
@@ -83,7 +86,7 @@ def main():
             st.subheader(f"🌍 **Translated Blog ({st.session_state.language})**")
             st.text_area("", st.session_state.translated_blog_content, height=350, key="translated")
 
-        # Download Buttons with Better Styling
+        
         st.markdown("<br>", unsafe_allow_html=True)
         col1, col2 = st.columns(2)
 
