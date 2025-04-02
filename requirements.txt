@@ -2,5 +2,5 @@ crewai
 crewai_tools
 python-dotenv
 streamlit
-sqlite3 >=3.8
+sqlite3 >=3.5.0
 chromadb
