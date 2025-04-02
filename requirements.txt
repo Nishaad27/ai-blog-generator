@@ -2,5 +2,3 @@ crewai
 crewai_tools
 python-dotenv
 streamlit
-chromadb>=0.4.0
-pysqlite3-binary>=0.5.1
